@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.dew.org/">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <ws:hello>
+      <name>World</name>
+    </ws:hello>
+  </soapenv:Body>
+</soapenv:Envelope>

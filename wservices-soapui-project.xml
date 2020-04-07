@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="bd910d84-13b2-4535-992e-9afb4c43ff9b" activeEnvironment="Default" name="wservices" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="759442cb-c477-4b94-b3ca-9ab8877540f8" wsaVersion="NONE" name="helloSoapBinding" type="wsdl" bindingName="{http://hello.dew.org/}helloSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/wservices/hello/HelloServices?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/wservices/hello/HelloServices?wsdl"><con:part><con:url>http://localhost:8080/wservices/hello/HelloServices?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="hello" targetNamespace="http://hello.dew.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://hello.dew.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://ws.dew.org/">
+  <wsdl:import location="http://localhost:8080/wservices/hello/HelloServices?wsdl=IHelloService.wsdl" namespace="http://ws.dew.org/"></wsdl:import>
+  <wsdl:binding name="helloSoapBinding" type="ns1:IHelloService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="hello">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="hello">
+    <wsdl:port binding="tns:helloSoapBinding" name="HelloServicesPort">
+      <soap:address location="http://localhost:8080/wservices/hello/HelloServices"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://localhost:8080/wservices/hello/HelloServices?wsdl=IHelloService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="IHelloService" targetNamespace="http://ws.dew.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://ws.dew.org/">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://ws.dew.org/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.dew.org/">
+      <xs:element name="hello" type="tns:hello"/>
+      <xs:element name="helloResponse" type="tns:helloResponse"/>
+      <xs:complexType name="hello">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="helloResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="hello">
+    <wsdl:part element="ns1:hello" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="helloResponse">
+    <wsdl:part element="ns1:helloResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IHelloService">
+    <wsdl:operation name="hello">
+      <wsdl:input message="ns1:hello" name="hello"></wsdl:input>
+      <wsdl:output message="ns1:helloResponse" name="helloResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/wservices/hello/HelloServices</con:endpoint></con:endpoints><con:operation id="2bf84914-4070-49c3-a320-988048b166b9" isOneWay="false" action="" name="hello" bindingOperationName="hello" type="Request-Response" outputName="helloResponse" inputName="hello" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="874d8c91-35ee-4939-8aff-3e11ba4b4d6b" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/wservices/hello/HelloServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.dew.org/">
+  <soapenv:Header>
+  <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <wsse:UsernameToken>
+      <wsse:Username>admin</wsse:Username>
+      <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">unkeZk4K91VQaDHU1S39nsQO8RE=</wsse:Password>
+      <wsse:Nonce>GTUXKXVMamAGX10MSQoEFA==</wsse:Nonce>
+      <wsu:Created>2020-04-06T18:38:04Z</wsu:Created>
+    </wsse:UsernameToken>
+  </wsse:Security>
+  </soapenv:Header>
+  <soapenv:Body>
+  <ws:hello>
+    <name>World</name>
+  </ws:hello>
+  </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username>test</con:username><con:password>test</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://hello.dew.org/IHelloService/hello"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
