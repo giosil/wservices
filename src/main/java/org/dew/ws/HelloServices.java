@@ -24,7 +24,7 @@ import org.dew.auth.AuthSOAPHandler;
 @Stateless
 @Remote(IHelloService.class)
 @WebService(serviceName = "hello", targetNamespace = "http://hello.dew.org/", endpointInterface = "org.dew.ws.IHelloService")
-@HandlerChain(file = "handler-chain.xml")
+@HandlerChain(file = "handler-chain.xml") // see org.dew.auth.AuthSOAPHandler
 @PermitAll
 public 
 class HelloServices implements IHelloService

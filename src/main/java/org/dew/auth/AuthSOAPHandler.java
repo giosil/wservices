@@ -1,6 +1,7 @@
 package org.dew.auth;
 
 import java.io.ByteArrayOutputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,13 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
+
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import javax.xml.ws.handler.MessageContext;
 
@@ -24,37 +31,45 @@ class AuthSOAPHandler implements SOAPHandler<SOAPMessageContext>
   public 
   boolean handleMessage(SOAPMessageContext context) 
   {
-    System.out.println("WSOAPHandler.handleMessage(" + context + ")...");
+    System.out.println("AuthSOAPHandler.handleMessage(" + context + ")...");
     
     boolean isRequestMessage = false;
     Object outboundProperty = context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
     if(outboundProperty instanceof Boolean) {
       isRequestMessage = !((Boolean) outboundProperty).booleanValue();
     }
+    if(!isRequestMessage) {
+      // Invoke the next handler
+      return true;
+    }
     
     BasicAssertion basicAssertion = checkBasicAuth(context);
     
     try {
-      SOAPMessage soapMessage = context.getMessage();
+      SOAPMessage soapMessage  = context.getMessage();
+      SOAPHeader  soapHeader   = soapMessage.getSOAPHeader();
+      byte[]      abSOAPHeader = transform(soapHeader);
       
-      if(isRequestMessage) {
+      AuthContentHandler authContentHandler = new AuthContentHandler();
+      if(abSOAPHeader != null && abSOAPHeader.length > 0) {
+        authContentHandler.load(abSOAPHeader);
+      }
+      else {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         soapMessage.writeTo(baos);
-        
-        AuthContentHandler authContentHandler = new AuthContentHandler();
         authContentHandler.load(baos.toByteArray());
-        
-        List<AuthAssertion> listOfAuthAssertion = authContentHandler.getListOfAssertion();
-        if(basicAssertion != null && listOfAuthAssertion != null) {
-          listOfAuthAssertion.add(0, basicAssertion);
-        }
-        
-        context.put(MESSAGE_ASSERTIONS, listOfAuthAssertion);
-        context.setScope(MESSAGE_ASSERTIONS, MessageContext.Scope.APPLICATION);
       }
+      
+      List<AuthAssertion> listOfAuthAssertion = authContentHandler.getListOfAssertion();
+      if(basicAssertion != null && listOfAuthAssertion != null) {
+        listOfAuthAssertion.add(0, basicAssertion);
+      }
+      
+      context.put(MESSAGE_ASSERTIONS, listOfAuthAssertion);
+      context.setScope(MESSAGE_ASSERTIONS, MessageContext.Scope.APPLICATION);
     }
     catch(Exception ex) {
-      System.out.println("Exception in WSOAPHandler.handleMessage(" + context + "): " + ex);
+      System.out.println("Exception in AuthSOAPHandler.handleMessage(" + context + "): " + ex);
     }
     
     // Invoke the next handler
@@ -65,7 +80,7 @@ class AuthSOAPHandler implements SOAPHandler<SOAPMessageContext>
   public 
   boolean handleFault(SOAPMessageContext context) 
   {
-    System.out.println("WSOAPHandler.handleFault(" + context + ")...");
+    System.out.println("AuthSOAPHandler.handleFault(" + context + ")...");
     
     // Invoke the next handler
     return true;
@@ -75,14 +90,14 @@ class AuthSOAPHandler implements SOAPHandler<SOAPMessageContext>
   public 
   void close(MessageContext context) 
   {
-    System.out.println("WSOAPHandler.close(" + context + ")...");
+    System.out.println("AuthSOAPHandler.close(" + context + ")...");
   }
   
   @Override
   public 
   Set<QName> getHeaders() 
   {
-    System.out.println("WSOAPHandler.getHeaders()...");
+    System.out.println("AuthSOAPHandler.getHeaders()...");
     return null;
   }
   
@@ -147,6 +162,25 @@ class AuthSOAPHandler implements SOAPHandler<SOAPMessageContext>
       }
     }
     catch(Exception ex) {
+    }
+    return null;
+  }
+  
+  public static
+  byte[] transform(SOAPElement soapElement)
+  {
+    if(soapElement == null) return null;
+    try {
+      DOMSource source = new DOMSource(soapElement);
+      
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      
+      TransformerFactory.newInstance().newTransformer().transform(source, new StreamResult(baos));
+      
+      return baos.toByteArray();
+    }
+    catch(Exception ex) {
+      System.out.println("Exception during transform " + soapElement + ": " + ex);
     }
     return null;
   }
