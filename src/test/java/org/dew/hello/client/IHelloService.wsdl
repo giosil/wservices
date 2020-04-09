@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://ws.dew.org/" name="IHelloService" targetNamespace="http://ws.dew.org/">
+<wsdl:types>
+  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.dew.org/" elementFormDefault="unqualified" targetNamespace="http://ws.dew.org/" version="1.0">
+    <xs:element name="hello" type="tns:hello"/>
+    <xs:element name="helloResponse" type="tns:helloResponse"/>
+    <xs:complexType name="hello">
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="helloResponse">
+      <xs:sequence>
+        <xs:element minOccurs="0" name="return" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:schema>
+</wsdl:types>
+<wsdl:message name="hello">
+  <wsdl:part element="ns1:hello" name="parameters">
+  </wsdl:part>
+</wsdl:message>
+<wsdl:message name="helloResponse">
+  <wsdl:part element="ns1:helloResponse" name="parameters">
+  </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="IHelloService">
+  <wsdl:operation name="hello">
+    <wsdl:input message="ns1:hello" name="hello">
+    </wsdl:input>
+    <wsdl:output message="ns1:helloResponse" name="helloResponse">
+    </wsdl:output>
+  </wsdl:operation>
+</wsdl:portType>
+</wsdl:definitions>
