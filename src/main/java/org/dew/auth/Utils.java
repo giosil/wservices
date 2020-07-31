@@ -27,12 +27,12 @@ class Utils
     StringBuffer sb = new StringBuffer(iLength);
     for(int i = 0; i < iLength; i++) {
       char c = sValue.charAt(i);
-      if(c == '<')  sb.append("&lt;");   else
-      if(c == '>')  sb.append("&gt;");   else
-      if(c == '&')  sb.append("&amp;");  else
-      if(c == '"')  sb.append("&quot;"); else
-      if(c == '\'') sb.append("&apos;"); else
-      if(c > 127) {
+      if(c == '<')       sb.append("&lt;");
+      else if(c == '>')  sb.append("&gt;");
+      else if(c == '&')  sb.append("&amp;");
+      else if(c == '"')  sb.append("&quot;");
+      else if(c == '\'') sb.append("&apos;");
+      else if(c > 127) {
         int code = (int) c;
         sb.append("&#" + code + ";");
       }
@@ -499,7 +499,7 @@ class Utils
     Calendar cal = stringToCalendar(object.toString());
     if(cal == null) return toSQLTimestamp(oDefault, null);
     return new java.sql.Timestamp(cal.getTimeInMillis());
-  }  
+  }
   
   public static int toInt(Object object) {
     if(object == null) return 0;
