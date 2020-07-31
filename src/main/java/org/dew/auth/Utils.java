@@ -178,16 +178,13 @@ class Utils
       if(c < 48) {
         sb.append('_');
       }
-      else
-      if(c > 122) {
+      else if(c > 122) {
         sb.append('_');
       }
-      else
-      if(Character.isDigit(c)) {
+      else if(Character.isDigit(c)) {
         sb.append(c);
       }
-      else
-      if(Character.isLetter(c)) {
+      else if(Character.isLetter(c)) {
         sb.append(c);
       }
       else {
@@ -385,19 +382,16 @@ class Utils
     if(iYear < 10) {
       sYear = "000" + sYear;
     }
-    else
-    if(iYear < 100) {
+    else if(iYear < 100) {
       sYear = "00" + sYear;
     }
-    else
-    if(iYear < 1000) {
+    else if(iYear < 1000) {
       sYear = "0" + sYear;
     }
     if(iMill < 10) {
       sMill = "00" + sMill; 
     }
-    else
-    if(iMill < 100) {
+    else if(iMill < 100) {
       sMill = "0" + sMill; 
     }
     if(millis) {
@@ -685,8 +679,7 @@ class Utils
     }
     // Check Day
     if(sDay.length() == 0) sDay = "01";
-    else
-    if(sDay.length() == 1) sDay = "0" + sDay;
+    else if(sDay.length() == 1) sDay = "0" + sDay;
     int iDay = 0;
     try { iDay = Integer.parseInt(sDay); } catch(Throwable th) { return null; }
     if(iDay < 1 || iDay > 31) return null;
@@ -696,8 +689,7 @@ class Utils
       if(sMonth == null) return null;
     }
     if(sMonth.length() == 0) sMonth = "01";
-    else
-    if(sMonth.length() == 1) sMonth = "0" + sMonth;
+    else if(sMonth.length() == 1) sMonth = "0" + sMonth;
     int iMonth = 0;
     try { iMonth = Integer.parseInt(sMonth); } catch(Throwable th) { return null; }
     if(iMonth < 1 || iMonth > 12) return null;
