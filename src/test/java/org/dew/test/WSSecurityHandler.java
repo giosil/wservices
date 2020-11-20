@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -265,7 +266,11 @@ class WSSecurityHandler implements SOAPHandler<SOAPMessageContext>
   Set<QName> getHeaders() 
   {
     System.out.println("WSSecurityHandler.getHeaders()...");
-    return null;
+    
+    QName securityHeader = new QName("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "Security");
+    HashSet<QName> headers = new HashSet<QName>(); 
+    headers.add(securityHeader);
+    return headers;
   }
   
   protected
