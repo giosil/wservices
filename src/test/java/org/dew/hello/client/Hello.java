@@ -34,7 +34,7 @@ public class Hello {
     protected String name;
 
     /**
-     * Recupera il valore della proprietà name.
+     * Recupera il valore della proprieta' name.
      * 
      * @return
      *     possible object is
@@ -46,7 +46,7 @@ public class Hello {
     }
 
     /**
-     * Imposta il valore della proprietà name.
+     * Imposta il valore della proprieta' name.
      * 
      * @param value
      *     allowed object is

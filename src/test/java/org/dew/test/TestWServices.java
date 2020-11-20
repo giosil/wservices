@@ -33,6 +33,8 @@ public class TestWServices extends TestCase {
       return;
     }
     
+    boolean traceEnabled = true;
+    
     Hello_Service service = new Hello_Service();
     
     IHelloService hello = service.getHelloServicesPort();
@@ -54,8 +56,7 @@ public class TestWServices extends TestCase {
       @SuppressWarnings("rawtypes")
       List<Handler> handlerChain = binding.getHandlerChain();
       
-      handlerChain.add(new WSSecurityHandler());
-      handlerChain.add(new WSTracerSOAPHandler());
+      handlerChain.add(new WSSecurityHandler(traceEnabled));
       
       // ... If the returned chain is modified a call to setHandlerChainis required to configure the binding instance with the new chain.
       binding.setHandlerChain(handlerChain);
@@ -64,6 +65,5 @@ public class TestWServices extends TestCase {
     String result = hello.hello("World");
     
     System.out.println(result);
-    
   }
 }
