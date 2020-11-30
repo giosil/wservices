@@ -1,7 +1,14 @@
 package org.dew.test;
 
+import java.security.cert.X509Certificate;
+
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
@@ -19,6 +26,39 @@ public class TestWServices extends TestCase {
   
   public TestWServices(String testName) {
     super(testName);
+    
+    // System properties proxy settings:
+    // 
+    // System.setProperty("http.proxyHost", "proxy.dew.org");
+    // System.setProperty("http.proxyPort", "8080");
+    
+    // System.setProperty("http.nonProxyHosts", "localhost|*.dew.org|xxx.yyy.www.zzz");
+    
+    // System.setProperty("https.proxyHost", "proxy.dew.org");
+    // System.setProperty("https.proxyPort", "8080");
+    
+    // System.setProperty("https.nonProxyHosts", "localhost|*.dew.org|xxx.yyy.www.zzz");
+    
+    // Programmatically proxy settings:
+    // 
+    // ProxySelector.setDefault(new CustomProxySelector("test.dew.org"));
+    
+    try {
+      TrustManager[] trustAllCerts = new TrustManager[] {
+        new X509TrustManager() {
+          public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null;}
+          public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+          public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+        }
+      };
+      SSLContext sc = SSLContext.getInstance("SSL");
+      sc.init(null, trustAllCerts, new java.security.SecureRandom());
+      HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    }
+    catch(Throwable th) {
+      System.err.println("HttpsURLConnection.setDefaultSSLSocketFactory: " + th);
+      return;
+    }
   }
   
   public static Test suite() {
