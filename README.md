@@ -49,6 +49,32 @@ String result = hello.hello("World");
 
 `wsimport -s src -d out -p org.dew.hello.client http://localhost:8080/wservices/hello/HelloServices?wsdl`
 
+## Notice
+
+The class **org.dew.test.WSSecurityHandler** use internal class **org.jcp.xml.dsig.internal.dom.XMLDSigRI** to build XML signature.
+
+To disable restrictions of javac add *-XDignore.symbol.file* compiler argument.
+
+```xml
+...
+<plugins>
+  <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.3</version>
+    <configuration>
+      <source>1.8</source> 
+      <target>1.8</target> 
+      <fork>true</fork>
+      <compilerArgs>
+        <arg>-XDignore.symbol.file</arg>
+      </compilerArgs>
+    </configuration>
+  </plugin>
+</plugins>
+...
+```
+
 ## Contributors
 
 * [Giorgio Silvestris](https://github.com/giosil)

@@ -189,7 +189,7 @@ class WSSecurityHandler implements SOAPHandler<SOAPMessageContext>
       
       if(action != null && action.length() > 0) {
         SOAPHeaderElement addrAction = header.addHeaderElement(new QName("http://www.w3.org/2005/08/addressing", "Action", "addr"));
-        addrAction.addTextNode("http://www.sist.puglia.it/Schemas/PDD_SIST/SCATEL/FSE/" + action);
+        addrAction.addTextNode("http://www.dew.org/Schemas/PDD/DEW/" + action);
       }
       
       SAMLAttributeAssertion samlAssertion = new SAMLAttributeAssertion("XXXXXX01A01H501X^^^&2.16.840.1.113883.2.9.4.3.2&ISO");
