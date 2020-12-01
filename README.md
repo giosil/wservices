@@ -51,7 +51,7 @@ String result = hello.hello("World");
 
 ## Notice
 
-The class **org.dew.test.WSSecurityHandler** use internal class **org.jcp.xml.dsig.internal.dom.XMLDSigRI** to build XML signature.
+The class **org.dew.test.WSSecurityHandler** uses internal class **org.jcp.xml.dsig.internal.dom.XMLDSigRI** to build XML signature.
 
 To disable restrictions of javac add *-XDignore.symbol.file* compiler argument.
 
