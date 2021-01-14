@@ -44,9 +44,43 @@
       <artifactId>bcmail-jdk15on</artifactId>
       <version>1.49</version>
     </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.santuario</groupId>
+      <artifactId>xmlsec</artifactId>
+      <version>1.5.7</version>
+    </dependency>
   </dependencies>
   
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.wsdl</include>
+          <include>**/*.xsd</include>
+        </includes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.wsdl</include>
+          <include>**/*.xsd</include>
+        </includes>
+      </testResource>
+    </testResources>
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -57,6 +91,8 @@
                 <target>1.8</target> 
                 <fork>true</fork>
                 <compilerArgs>
+                    <!-- Necessary if you use org.jcp.xml.dsig.internal.dom.XMLDSigRI -->
+                    <!-- With xmlsec you can use org.apache.jcp.xml.dsig.internal.dom.XMLDSigRI -->
                     <arg>-XDignore.symbol.file</arg>
                 </compilerArgs>
             </configuration>

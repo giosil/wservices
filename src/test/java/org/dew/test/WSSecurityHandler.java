@@ -160,7 +160,10 @@ class WSSecurityHandler implements SOAPHandler<SOAPMessageContext>
       
       header.addChildElement(securityElement);
       
-      XMLSignatureFactory signFactory   = XMLSignatureFactory.getInstance("DOM", new org.jcp.xml.dsig.internal.dom.XMLDSigRI());
+      // org.jcp.xml.dsig.internal.dom.XMLDSigRI is an internal class of Java Runtime
+      // To compile add -XDignore.symbol.file.
+      // XMLSignatureFactory signFactory   = XMLSignatureFactory.getInstance("DOM", new org.jcp.xml.dsig.internal.dom.XMLDSigRI());
+      XMLSignatureFactory signFactory   = XMLSignatureFactory.getInstance("DOM", new org.apache.jcp.xml.dsig.internal.dom.XMLDSigRI());
       CanonicalizationMethod c14nMethod = signFactory.newCanonicalizationMethod(CanonicalizationMethod.EXCLUSIVE, (C14NMethodParameterSpec) null);
       DigestMethod         digestMethod = signFactory.newDigestMethod(DigestMethod.SHA1, null);
       SignatureMethod        signMethod = signFactory.newSignatureMethod(SignatureMethod.RSA_SHA1, null);
