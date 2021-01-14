@@ -51,9 +51,7 @@ String result = hello.hello("World");
 
 ## Notice
 
-The class **org.dew.test.WSSecurityHandler** uses internal class **org.jcp.xml.dsig.internal.dom.XMLDSigRI** to build XML signature.
-
-To disable restrictions of javac add *-XDignore.symbol.file* compiler argument.
+If in **org.dew.test.WSSecurityHandler** you use **org.jcp.xml.dsig.internal.dom.XMLDSigRI** you have to disable restrictions of javac adding *-XDignore.symbol.file* in compiler arguments.
 
 ```xml
 ...
@@ -72,6 +70,23 @@ To disable restrictions of javac add *-XDignore.symbol.file* compiler argument.
     </configuration>
   </plugin>
 </plugins>
+...
+```
+
+Alternatively it is recommended to use **org.apache.jcp.xml.dsig.internal.dom.XMLDSigRI** of Apache Santuario&trade; (https://santuario.apache.org/).
+
+```xml
+...
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.santuario</groupId>
+      <artifactId>xmlsec</artifactId>
+      <version>1.5.7</version>
+    </dependency>
 ...
 ```
 
