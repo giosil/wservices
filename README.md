@@ -51,7 +51,7 @@ String result = hello.hello("World");
 
 ## Notice
 
-If in **org.dew.test.WSSecurityHandler** you use **org.jcp.xml.dsig.internal.dom.XMLDSigRI** you have to disable restrictions of javac adding *-XDignore.symbol.file* in compiler arguments.
+If you use **org.jcp.xml.dsig.internal.dom.XMLDSigRI** in **org.dew.test.WSSecurityHandler** you have to disable restrictions of javac adding *-XDignore.symbol.file* in compiler arguments.
 
 ```xml
 ...
