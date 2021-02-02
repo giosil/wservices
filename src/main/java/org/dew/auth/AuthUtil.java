@@ -29,6 +29,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 
 public 
 class AuthUtil 
@@ -202,7 +205,6 @@ class AuthUtil
     return (X509Certificate) cf.generateCertificate(bais);
   }
   
-  @SuppressWarnings("deprecation")
   public static
   PrivateKey loadPrivateKey(String sFile)
     throws Exception
@@ -217,22 +219,29 @@ class AuthUtil
     else {
       is = new FileInputStream(sFile);
     }
-    org.bouncycastle.openssl.PEMReader pemReader = null;
+    
+    PEMParser pemParser = null;
     try {
       Security.addProvider(new BouncyCastleProvider());
       
-      pemReader = new org.bouncycastle.openssl.PEMReader(new InputStreamReader(is));
+      pemParser = new PEMParser(new InputStreamReader(is));
       
-      Object pemObject = pemReader.readObject();
-      if(pemObject instanceof KeyPair) {
-        return ((KeyPair) pemObject).getPrivate();
+      Object object = pemParser.readObject();
+      
+      if(object instanceof PEMKeyPair) {
+        
+        PEMKeyPair pemKeyPair = (PEMKeyPair) object;
+        
+        KeyPair keyPair = new JcaPEMKeyConverter().getKeyPair(pemKeyPair);
+        
+        return keyPair.getPrivate();
       }
       
       throw new Exception("Invalid pem file " + sFile);
     }
     finally {
       if(is != null) try{ is.close(); } catch(Exception ex) {}
-      if(pemReader != null) try{ pemReader.close(); } catch(Exception ex) {}
+      if(pemParser != null) try{ pemParser.close(); } catch(Exception ex) {}
     }
   }
   
@@ -356,7 +365,10 @@ class AuthUtil
   public static
   List<String> extractTags(byte[] xml, String tagName, String textContained)
   {
-    if(xml == null || xml.length < 5) return new ArrayList<String>(0);
+    if(xml == null || xml.length < 5) {
+      return new ArrayList<String>(0);
+    }
+    
     List<String> result = new ArrayList<String>();
     try {
       boolean boClosingTag = false;
@@ -376,8 +388,7 @@ class AuthUtil
             boClosingTag = true;
           }
         }
-        else
-        if(b == '>') {
+        else if(b == '>') {
           if(iStartTag >= 0) {
             byte[] tag  = Arrays.copyOfRange(xml, iStartTag, i+1);
             String sTag = new String(tag);
