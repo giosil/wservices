@@ -5,8 +5,10 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -23,6 +25,9 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class TestWServices extends TestCase {
+  
+  public static final String CONNECT_TIMEOUT = "com.sun.xml.internal.ws.connect.timeout";
+  public static final String REQUEST_TIMEOUT = "com.sun.xml.internal.ws.request.timeout";
   
   public TestWServices(String testName) {
     super(testName);
@@ -53,7 +58,15 @@ public class TestWServices extends TestCase {
       };
       SSLContext sc = SSLContext.getInstance("SSL");
       sc.init(null, trustAllCerts, new java.security.SecureRandom());
+      
       HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+      
+      HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+          return true;
+        }
+      });
     }
     catch(Throwable th) {
       System.err.println("HttpsURLConnection.setDefaultSSLSocketFactory: " + th);
@@ -90,6 +103,9 @@ public class TestWServices extends TestCase {
       // Basic Auth
       requestContext.put(BindingProvider.USERNAME_PROPERTY, "admin");
       requestContext.put(BindingProvider.PASSWORD_PROPERTY, "admin");
+      // Timetout
+      requestContext.put(REQUEST_TIMEOUT, 20000); // ms
+      requestContext.put(CONNECT_TIMEOUT, 20000); // ms
       
       // Add handler chain programmatically
       Binding binding = bindingProvider.getBinding();
