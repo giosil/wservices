@@ -263,7 +263,7 @@ class AuthContentHandler implements ContentHandler
     }
     else if(sCurrentTag.endsWith("assertion|signature|signaturevalue")) {
       if(assertion != null && sCurrentValue.length() > 1) {
-        try{ assertion.setSignatureValue(Base64Coder.decode(sCurrentValue)); } catch(Exception ex) {}
+        try{ assertion.setSignatureValue(Base64Coder.decodeLines(sCurrentValue)); } catch(Exception ex) {}
       }
     }
     else if(sCurrentTag.endsWith("assertion|signature|keyinfo|x509data|x509certificate")) {

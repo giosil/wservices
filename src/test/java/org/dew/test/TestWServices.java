@@ -67,6 +67,9 @@ public class TestWServices extends TestCase {
           return true;
         }
       });
+      
+      // Disable Server Name Indication (SNI) extension of Transport Layer Security (TLS) 
+      System.setProperty("jsse.enableSNIExtension", "false");
     }
     catch(Throwable th) {
       System.err.println("HttpsURLConnection.setDefaultSSLSocketFactory: " + th);
