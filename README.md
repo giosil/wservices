@@ -90,6 +90,16 @@ Alternatively it is recommended to use **org.apache.jcp.xml.dsig.internal.dom.XM
 ...
 ```
 
+### Enabling SSL debugging
+
+`mvn test -DargLine="-Ddew.test.op=hello_s -Djavax.net.debug=all"`
+
+`mvn test -DargLine="-Ddew.test.op=hello_s -Djavax.net.debug=ssl,handshake"`
+
+`mvn test -DargLine="-Ddew.test.op=hello_s -Djavax.net.debug=ssl:handshake:verbose:keymanager:trustmanager -Djava.security.debug=access:stack"`
+
+`mvn test -DargLine="-Ddew.test.op=hello_s -Djavax.net.debug=ssl:record:plaintext"`
+
 ## Contributors
 
 * [Giorgio Silvestris](https://github.com/giosil)

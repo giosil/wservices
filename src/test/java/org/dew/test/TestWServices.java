@@ -1,5 +1,11 @@
 package org.dew.test;
 
+import java.io.InputStream;
+
+import java.net.URL;
+
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
 import java.util.List;
@@ -7,8 +13,11 @@ import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -91,6 +100,7 @@ public class TestWServices extends TestCase {
     }
     
     boolean traceEnabled = true;
+    boolean enableMutual = sOperation.endsWith("s");
     
     Hello_Service service = new Hello_Service();
     
@@ -110,6 +120,13 @@ public class TestWServices extends TestCase {
       requestContext.put(REQUEST_TIMEOUT, 20000); // ms
       requestContext.put(CONNECT_TIMEOUT, 20000); // ms
       
+      if(enableMutual) {
+        // SSL/TLS Mutual Authentication
+        SSLSocketFactory sslSocketFactory = getSSLSocketFactoryMutualAuth("keystore.jks", "password_kst", "password_key");
+        requestContext.put("com.sun.xml.internal.ws.transport.https.client.SSLSocketFactory", sslSocketFactory);
+        requestContext.put("com.sun.xml.ws.transport.https.client.SSLSocketFactory", sslSocketFactory);
+      }
+      
       // Add handler chain programmatically
       Binding binding = bindingProvider.getBinding();
       
@@ -125,5 +142,37 @@ public class TestWServices extends TestCase {
     String result = hello.hello("World");
     
     System.out.println(result);
+  }
+  
+  public static
+  SSLSocketFactory getSSLSocketFactoryMutualAuth(String sFile, String keystorePassword, String keyPassword)
+    throws Exception
+  {
+    InputStream is = null;
+    URL url = null;
+    try {
+      url = Thread.currentThread().getContextClassLoader().getResource(sFile);
+    }
+    catch(Exception ex) {
+      ex.printStackTrace();
+    }
+    if(url != null) {
+      is = url.openStream();
+    }
+    else {
+      return null;
+    }
+    
+    KeyStore keystore = KeyStore.getInstance("JKS");
+    keystore.load(is, keystorePassword != null ? keystorePassword.toCharArray() : new char[0]);
+    
+    KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+    keyManagerFactory.init(keystore, keyPassword != null ? keyPassword.toCharArray() : new char[0]);
+    KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+    
+    SSLContext sslContext = SSLContext.getInstance("TLS");
+    sslContext.init(keyManagers, null, new SecureRandom());
+    
+    return sslContext.getSocketFactory();
   }
 }
