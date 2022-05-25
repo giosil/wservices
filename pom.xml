@@ -82,21 +82,28 @@
       </testResource>
     </testResources>
     <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.3</version>
-            <configuration>
-                <source>1.8</source> 
-                <target>1.8</target> 
-                <fork>true</fork>
-                <compilerArgs>
-                    <!-- Necessary if you use org.jcp.xml.dsig.internal.dom.XMLDSigRI -->
-                    <!-- With xmlsec you can use org.apache.jcp.xml.dsig.internal.dom.XMLDSigRI -->
-                    <arg>-XDignore.symbol.file</arg>
-                </compilerArgs>
-            </configuration>
-        </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <packagingExcludes>.svn,.svn/*.*</packagingExcludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.8</source> 
+          <target>1.8</target> 
+          <fork>true</fork>
+          <compilerArgs>
+          <!-- Necessary if you use org.jcp.xml.dsig.internal.dom.XMLDSigRI -->
+          <!-- With xmlsec you can use org.apache.jcp.xml.dsig.internal.dom.XMLDSigRI -->
+          <arg>-XDignore.symbol.file</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
     </plugins>
     <finalName>wservices</finalName>
   </build>
