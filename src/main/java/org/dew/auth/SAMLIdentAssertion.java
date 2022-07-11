@@ -101,7 +101,9 @@ class SAMLIdentAssertion extends SAMLAssertion
     rdaList.add(new IdentityItem(value, current, beginDate, endDate));
   }
   
-  public int checkAttributes() {
+  public 
+  int checkAttributes() 
+  {
     if(attributes == null) return 0;
     if(cfList != null && cfList.size() > 0) {
       return attributes.size();
@@ -124,6 +126,19 @@ class SAMLIdentAssertion extends SAMLAssertion
       rdaList.add(new IdentityItem(sValue, sCurrent, sBeginDate, sEndDate));
     }
     return attributes.size();
+  }
+  
+  @Override
+  public 
+  boolean checkValidity() 
+  {
+    long currentTime   = System.currentTimeMillis();
+    long lNotBefore    = this.notBefore    != null ? this.notBefore.getTime()    : currentTime;
+    long lNotOnOrAfter = this.notOnOrAfter != null ? this.notOnOrAfter.getTime() : currentTime + 30000;
+    lNotBefore = lNotBefore - 30000;
+    if(currentTime < lNotBefore)    return false;
+    if(currentTime > lNotOnOrAfter) return false;
+    return true;
   }
   
   public 
