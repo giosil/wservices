@@ -100,6 +100,48 @@ Alternatively it is recommended to use **org.apache.jcp.xml.dsig.internal.dom.XM
 
 `mvn test -DargLine="-Ddew.test.op=hello_s -Djavax.net.debug=ssl:record:plaintext"`
 
+## Apache CXF Logging configuration in JBoss / Wildfly
+
+To enable logging in standalone.xml:
+
+```xml
+...
+    </extensions>
+    <system-properties>
+        <property name="org.apache.cxf.logging.enabled" value="true"/>
+    </system-properties>
+    <management>
+...
+```
+
+To disable printing Fault stacktrace in standalone.xml:
+
+```xml
+...
+        <subsystem xmlns="urn:jboss:domain:logging:8.0">
+...
+            <logger category="org.apache.cxf.phase.PhaseInterceptorChain">
+                <level name="ERROR"/>
+            </logger>
+...
+        </subsystem>
+...
+```
+
+To disable printing INFO service client creation in standalone.xml:
+
+```xml
+...
+        <subsystem xmlns="urn:jboss:domain:logging:8.0">
+...
+            <logger category="org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean">
+                <level name="ERROR"/>
+            </logger>
+...
+        </subsystem>
+...
+```
+
 ## Contributors
 
 * [Giorgio Silvestris](https://github.com/giosil)
