@@ -1,5 +1,6 @@
 package org.dew.ws;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import javax.ejb.Stateless;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-
+import javax.security.cert.X509Certificate;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.xml.ws.WebServiceContext;
@@ -36,6 +37,10 @@ class HelloServices implements IHelloService
   public 
   String hello(String name) 
   {
+    // Get UserPrincipal
+    Principal userPrincipal = webServiceContext.getUserPrincipal();
+    System.out.println("userPrincipal = " + userPrincipal);
+    
     // MessageContext examples
     MessageContext messageContext = webServiceContext.getMessageContext();
     
@@ -47,13 +52,19 @@ class HelloServices implements IHelloService
       mapHttpRequestHeaders.forEach((k, v) -> System.out.println("  " + k + "=" + v));
     }
     
-    // QueryString parameter
+    // HttpServletRequest 
     String greeting = null;
     Object servletRequest = messageContext.get(MessageContext.SERVLET_REQUEST);
     if(servletRequest instanceof HttpServletRequest) {
       System.out.println(MessageContext.SERVLET_REQUEST + " = " + servletRequest);
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
       greeting = httpServletRequest.getParameter("g");
+      
+      // Get SSL/TLS Client Certificate (Mutual Authentication)
+      X509Certificate[] certificates = (X509Certificate[]) httpServletRequest.getAttribute("javax.servlet.request.X509Certificate");
+      if(certificates != null && certificates.length > 0) {
+        System.out.println("javax.servlet.request.X509Certificate[0] = " + certificates[0]);
+      }
     }
     if(greeting == null || greeting.length() == 0) greeting = "Hello";
     
