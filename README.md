@@ -97,7 +97,7 @@ Edit standalone.xml:
 - Copy application.keystore and client.keystore in $JBOSS_HOME/standalone/configuration folder;
 - Modify keystore configuration;
 - Add truststore configuration in authentication;
-- Add verify-client="REQUIRED" attribute in https-listener;
+- Add verify-client="REQUIRED" attribute in https-listener tag.
 
 ```xml
 ...
