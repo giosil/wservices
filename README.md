@@ -90,7 +90,62 @@ Alternatively it is recommended to use **org.apache.jcp.xml.dsig.internal.dom.XM
 ...
 ```
 
-### Enabling SSL debugging
+## Enabling SSL/TLS Mutual Authentication in JBoss / Wildfly
+
+Edit standalone.xml:
+
+- Copy application.keystore and client.keystore in $JBOSS_HOME/standalone/configuration folder;
+- Modify keystore configuration;
+- Add truststore configuration in authentication;
+- Add verify-client="REQUIRED" attribute in https-listener;
+
+```xml
+...
+        <security-realms>
+            ...
+            <security-realm name="ApplicationRealm">
+                <server-identities>
+                    <ssl>
+                        <keystore path="application.keystore" relative-to="jboss.server.config.dir" keystore-password="password" alias="server" key-password="password" generate-self-signed-certificate-host="localhost"/>
+                    </ssl>
+                </server-identities>
+                <authentication>
+                    <truststore path="client.keystore" relative-to="jboss.server.config.dir" keystore-password="password"/>
+                    ...
+                </authentication>
+                ...
+            </security-realm>
+        </security-realms>
+...
+        <subsystem xmlns="urn:jboss:domain:undertow:12.0" ... >
+            ...
+            <server name="default-server">
+                ...
+                <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" verify-client="REQUIRED" enable-http2="true"/>
+                ...
+            </server>
+            ...
+        </subsystem>
+...
+```
+
+Get client certificate from HttpServletRequest
+
+```java
+  ...
+  @Resource
+  protected WebServiceContext webServiceContext;
+  ...
+  
+  // Method implementation
+  MessageContext messageContext = webServiceContext.getMessageContext();
+  
+  HttpServletRequest servletRequest = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
+  
+  X509Certificate[] certificates = (X509Certificate[]) httpServletRequest.getAttribute("javax.servlet.request.X509Certificate");
+```
+
+## Enabling SSL/TLS debugging
 
 `mvn test -DargLine="-Ddew.test.op=hello_s -Djavax.net.debug=all"`
 
