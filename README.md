@@ -94,7 +94,7 @@ Alternatively it is recommended to use **org.apache.jcp.xml.dsig.internal.dom.XM
 
 Edit standalone.xml:
 
-- Copy application.keystore and client.keystore in $JBOSS_HOME/standalone/configuration folder;
+- Copy application.keystore (optional if self signed) and client.keystore in $JBOSS_HOME/standalone/configuration folder;
 - Modify keystore configuration;
 - Add truststore configuration in authentication;
 - Add verify-client="REQUIRED" attribute in https-listener tag.
